@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Login</title>
+    <script>
+        function checkLoginError() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error')) {
+                alert("Invalid username or password! Please try again.");
+            }
+        }
+    </script>
+</head>
+<body onload="checkLoginError()">
+    <h2>Login</h2>
+    <form action="UserServlet" method="post">
+        <input type="hidden" name="action" value="login">
+        Username: <input type="text" name="username" required><br>
+        Password: <input type="password" name="password" required><br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>

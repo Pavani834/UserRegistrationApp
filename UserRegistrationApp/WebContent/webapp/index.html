@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+</head>
+<body>
+    <h2>Register</h2>
+    <form action="UserServlet" method="post">
+        <input type="hidden" name="action" value="register">
+        Username: <input type="text" name="username" required><br>
+        Email: <input type="email" name="email" required><br>
+        Date of Birth: <input type="date" name="dob" required><br>
+        Password: <input type="password" name="password" required><br>
+        <input type="submit" value="Register">
+    </form>
+    <p>Already registered? <a href="login.html">Login here</a></p>
+</body>
+</html>
