@@ -3,29 +3,20 @@ package com.user;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private static final String DB_URL = "jdbc:mysql://localhost:3306/UserDB";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "admin123"; 
+    private static final String DB_PASSWORD = "admin123";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
-
         String action = request.getParameter("action");
 
         if ("register".equals(action)) {
@@ -33,9 +24,15 @@ public class UserServlet extends HttpServlet {
         } else if ("login".equals(action)) {
             loginUser(request, response);
         } else {
-            response.getWriter().println("<h3>Invalid Action!</h3>");
+            response.getWriter().println("<h3>Invalid Action</h3>");
         }
     }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.getWriter().println("<h3>GET not supported. Please use a form to POST data.</h3>");
+    }
+
     private void registerUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String username = request.getParameter("username");
@@ -53,16 +50,17 @@ public class UserServlet extends HttpServlet {
             stmt.setString(1, username);
             stmt.setString(2, email);
             stmt.setString(3, dob);
-            stmt.setString(4, hashedPassword); 
+            stmt.setString(4, hashedPassword);
             stmt.executeUpdate();
 
-            response.sendRedirect("login.html");
             conn.close();
+            response.sendRedirect("login.html");
         } catch (Exception e) {
             e.printStackTrace();
             response.getWriter().println("Database error: " + e.getMessage());
         }
     }
+
     private void loginUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String username = request.getParameter("username");
@@ -96,15 +94,16 @@ public class UserServlet extends HttpServlet {
             response.getWriter().println("Database error: " + e.getMessage());
         }
     }
+
     private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(password.getBytes());
-            StringBuilder hexString = new StringBuilder();
+            StringBuilder hex = new StringBuilder();
             for (byte b : hash) {
-                hexString.append(String.format("%02x", b));
+                hex.append(String.format("%02x", b));
             }
-            return hexString.toString();
+            return hex.toString();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error hashing password", e);
         }

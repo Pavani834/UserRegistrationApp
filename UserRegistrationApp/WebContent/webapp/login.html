@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>User Login</title>
+<head><title>Login</title></head>
+<body onload="checkLoginError()">
     <script>
         function checkLoginError() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('error')) {
-                alert("Invalid username or password! Please try again.");
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('error')) {
+                alert("Invalid username or password!");
             }
         }
     </script>
-</head>
-<body onload="checkLoginError()">
     <h2>Login</h2>
     <form action="UserServlet" method="post">
         <input type="hidden" name="action" value="login">
